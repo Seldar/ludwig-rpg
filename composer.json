@@ -1,0 +1,24 @@
+{
+  "name": "seldar/ludwig-rpg",
+  "description": "a rpg game played using console commands",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Volkan Ulukut",
+      "email": "arthan@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Ludwig\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.6"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.4.*",
+    "phpunit/dbunit": ">=1.2"
+  }
+}
