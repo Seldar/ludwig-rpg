@@ -14,9 +14,7 @@ namespace Ludwig\Controllers;
 abstract class AbstractClass
 {
     protected $className;
-    public abstract function getAlgorithmsMultiplier();
-    public abstract function getPerformanceMultiplier();
-    public abstract function getPersistenceMultiplier();
+    public abstract function getMultiplier($attribute);
     public function getClassName()
     {
         return $this->className;

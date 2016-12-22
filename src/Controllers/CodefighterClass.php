@@ -14,16 +14,21 @@ namespace Ludwig\Controllers;
 class CodefighterClass extends AbstractClass
 {
     protected $className = 'Codefighter';
-    public function getAlgorithmsMultiplier()
+    public function getMultiplier($attribute)
     {
-        return 1;
-    }
-    public function getPerformanceMultiplier()
-    {
-        return 0.5;
-    }
-    public function getPersistenceMultiplier()
-    {
-        return 2;
+        switch($attribute)
+        {
+            case "Algorithms":
+                return 1;
+                break;
+            case "Performance":
+                return 0.5;
+                break;
+            case "Persistence":
+                return 2;
+                break;
+            default:
+                return 1;
+        }
     }
 }

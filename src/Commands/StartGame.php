@@ -17,14 +17,18 @@ use Ludwig\Controllers\Interactive;
 use Ludwig\Models\Character;
 use Ludwig\Models\IDataSource;
 
-class StartGame
+class StartGame extends Command
 {
-    private $character;
-    private $dataSource;
+    /**
+     * Holds the Character object.
+     *
+     * @var Character
+     */
+    protected $character;
 
     public function __construct($argv, IDataSource $dataSource)
     {
-        $this->dataSource = $dataSource;
+        $this->datasource = $dataSource;
         try {
             if (isset($argv[1])) {
                 switch ($argv[1]) {
@@ -60,14 +64,10 @@ class StartGame
     private function resumeGame($saveKey)
     {
         try {
-            $this->character = Character::readById($saveKey, $this->dataSource);
+            $this->character = Character::readById($saveKey, $this->datasource);
             if ($this->character) {
-                Interactive::consolePrint('You successfully load your ' . $this->character->class->getClassName() . ' with below stats: ');
-                Interactive::consolePrint('Algorithms: ' . $this->character->algorithms);
-                Interactive::consolePrint('Performance: ' . $this->character->performance);
-                Interactive::consolePrint('Persistence: ' . $this->character->persistence);
-                Interactive::consolePrint('Experience: ' . $this->character->experience);
-                Interactive::consolePrint('Level: ' . $this->character->level);
+                Interactive::consolePrint('You successfully load your ' . $this->character->getClass()->getClassName() . ' with below stats: ');
+                $this->checkProfile();
             } else {
                 throw new \Exception('The load key you\'ve entered does not exists.');
             }
@@ -106,14 +106,12 @@ class StartGame
             $freebies = explode(",", $line);
         } while (array_sum($freebies) <> 5);
 
-        $character = new Character($this->dataSource);
+        $character = new Character($this->datasource);
         $character->createCharacter($classObject,0,$freebies);
 
-        Interactive::consolePrint('You have successfully created your ' . $character->class->getClassName() . ' with below stats: ');
-        Interactive::consolePrint('Algorithms: ' . $character->algorithms);
-        Interactive::consolePrint('Performance: ' . $character->performance);
-        Interactive::consolePrint('Persistence: ' . $character->persistence);
+        Interactive::consolePrint('You have successfully created your ' . $character->getClass()->getClassName() . ' with below stats: ');
         $this->character = $character;
+        $this->checkProfile();
     }
 
     public function getCharacter()

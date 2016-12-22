@@ -22,6 +22,12 @@ class Level extends Model
     private $level;
 
     /**
+     * title of this level
+     * @var string
+     */
+    private $title;
+
+    /**
      * minimum experience required for this level
      * @var string
      */
@@ -56,11 +62,22 @@ class Level extends Model
         return $this->min_exp;
     }
 
-
-    public function getLevelByExperience($min_exp)
+    /**
+     * getter for field title
+     * @return string
+     */
+    public function getTitle()
     {
-        $result = $this->query($this->datasource, "SELECT * FROM levels WHERE min_exp <= :min_exp ORDER BY level desc LIMIT 1" ,['min_exp' => $min_exp]);
-        return $result[0]['level'];
+        return $this->title;
+    }
+
+
+    public static function getLevelByExperience(IDataSource $datasource, $min_exp)
+    {
+        $obj = new static($datasource);
+        $level = $obj->query($datasource, "SELECT * FROM levels WHERE min_exp <= :min_exp ORDER BY level desc LIMIT 1" ,['min_exp' => $min_exp]);
+        $obj->arrayToProperties($level[0]);
+        return $obj;
     }
 
     /**
@@ -72,6 +89,7 @@ class Level extends Model
     {
         $this->min_exp =  isset($array['min_exp']) ? $array['min_exp'] : null;
         $this->level =  isset($array['level']) ? $array['level'] : null;
+        $this->title =  isset($array['title']) ? $array['title'] : null;
     }
 
     /**
@@ -85,6 +103,8 @@ class Level extends Model
             $array['level'] = $this->level;
         if(isset($this->min_exp))
             $array['min_exp'] = $this->min_exp;
+        if(isset($this->title))
+            $array['title'] = $this->title;
         return $array;
     }
 }

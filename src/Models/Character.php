@@ -12,7 +12,6 @@ namespace Ludwig\Models;
 
 
 use Ludwig\Controllers\AbstractClass;
-use Ludwig\Controllers\Interactive;
 use Ludwig\Controllers\HackerogueClass;
 use Ludwig\Controllers\SoftwizardClass;
 use Ludwig\Controllers\CodefighterClass;
@@ -20,13 +19,14 @@ use Ludwig\Controllers\CodefighterClass;
 class Character extends Model
 {
     private $datasource;
-    public $key;
-    public $class;
-    public $experience = 0;
-    public $level = 0;
-    public $algorithms = 5;
-    public $performance = 5;
-    public $persistence = 5;
+    private $key;
+    private $class;
+    private $experience = 0;
+    private $level = 0;
+    private $title = 'Intern';
+    private $algorithms = 5;
+    private $performance = 5;
+    private $persistence = 5;
 
     /**
      * Character constructor.
@@ -37,6 +37,70 @@ class Character extends Model
         $this->datasource = $datasource;
         $this->tableName = "characters";
         $this->primaryKey = "key";
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @return AbstractClass
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExperience()
+    {
+        return $this->experience;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAlgorithms()
+    {
+        return $this->algorithms;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPerformance()
+    {
+        return $this->performance;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPersistence()
+    {
+        return $this->persistence;
     }
 
     public function createCharacter(AbstractClass $class, $experience, $freebies)
@@ -67,26 +131,21 @@ class Character extends Model
     public function earnExperience($xp)
     {
         $this->experience += $xp;
-        $this->updateLevel(true);
+        return $this->updateLevel(true);
     }
 
     public function updateLevel($withLevelUp)
     {
-        $level = new Level($this->datasource);
-        if ($this->level < $level->getLevelByExperience($this->experience)) {
+        $leveled_up = false;
+        $level = Level::getLevelByExperience($this->datasource,$this->experience);
+        if ($this->level < $level->getLevel()) {
             if ($withLevelUp) {
-                $this->levelUp();
+                $leveled_up = true;
             }
-            $this->level = $level->getLevelByExperience($this->experience);
+            $this->level = $level->getLevel();
+            $this->title = $level->getTitle();
         }
-
-    }
-
-    public function levelUp()
-    {
-        Interactive::consolePrint('You just leveled up! You gained 5 freebies. Choose the attributes you want to increase (seperated by comma): ([A]lgorithms, Per[f]ormance, Per[s]istance)');
-        $line = Interactive::consoleInput();
-
+        return $leveled_up;
     }
 
     /**
@@ -129,7 +188,7 @@ class Character extends Model
         if (isset($this->key))
             $array['key'] = $this->key;
         if (isset($this->class))
-            $array['class'] = $this->class->getClassName();
+            $array['class'] = $this->getClass()->getClassName();
         if (isset($this->experience))
             $array['experience'] = $this->experience;
         if (isset($this->algorithms))
@@ -143,7 +202,7 @@ class Character extends Model
 
     public function save()
     {
-        $this->key = md5(microtime() . 'E' . $this->experience . 'A' . $this->algorithms . 'F' . $this->performance . 'S' . $this->persistence . 'C' . $this->class->getClassName());
+        $this->key = md5(microtime() . 'E' . $this->experience . 'A' . $this->algorithms . 'F' . $this->performance . 'S' . $this->persistence . 'C' . $this->getClass()->getClassName());
         $this->datasource->create($this->getTableName(), $this->toArray());
     }
 

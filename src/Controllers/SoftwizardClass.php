@@ -14,16 +14,21 @@ namespace Ludwig\Controllers;
 class SoftwizardClass extends AbstractClass
 {
     protected $className = 'Softwizard';
-    public function getAlgorithmsMultiplier()
+    public function getMultiplier($attribute)
     {
-        return 2.0;
-    }
-    public function getPerformanceMultiplier()
-    {
-        return 1;
-    }
-    public function getPersistenceMultiplier()
-    {
-        return 0.5;
+        switch($attribute)
+        {
+            case "Algorithms":
+                return 2;
+                break;
+            case "Performance":
+                return 1;
+                break;
+            case "Persistence":
+                return 0.5;
+                break;
+            default:
+                return 1;
+        }
     }
 }

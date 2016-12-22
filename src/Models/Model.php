@@ -123,7 +123,7 @@ abstract class Model
      */
     abstract public function arrayToProperties($array);
 
-    public function query(IDataSource $datasource, $query, $bindValues)
+    public static function query(IDataSource $datasource, $query, $bindValues = [])
     {
         return $datasource->query($query, $bindValues);
     }

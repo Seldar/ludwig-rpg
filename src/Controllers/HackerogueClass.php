@@ -14,16 +14,21 @@ namespace Ludwig\Controllers;
 class HackerogueClass extends AbstractClass
 {
     protected $className = 'Hackerogue';
-    public function getAlgorithmsMultiplier()
+    public function getMultiplier($attribute)
     {
-        return 0.5;
-    }
-    public function getPerformanceMultiplier()
-    {
-        return 2;
-    }
-    public function getPersistenceMultiplier()
-    {
-        return 1;
+        switch($attribute)
+        {
+            case "Algorithms":
+                return 0.5;
+                break;
+            case "Performance":
+                return 2;
+                break;
+            case "Persistence":
+                return 1;
+                break;
+            default:
+                return 1;
+        }
     }
 }
