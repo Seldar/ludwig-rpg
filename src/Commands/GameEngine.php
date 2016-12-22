@@ -51,7 +51,7 @@ class GameEngine extends Command
     {
         $quit = false;
         while (!$quit) {
-            Interactive::consolePrint("You are at google.com. You can go [e]xplore the web from here. You can google [y]ourself. You can also ctrl+[s] your progress or just [c]lose the browser and [q]uit.");
+            Interactive::consolePrint("Hello Ludwig. You are at google.com. You can go [e]xplore the web from here. You can google [y]ourself. You can also ctrl+[s] your progress or just [c]lose the browser and [q]uit.");
             $input = Interactive::consoleInput();
             switch ($input) {
                 case "e":

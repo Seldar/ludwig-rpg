@@ -10,10 +10,27 @@
 
 namespace Ludwig\Controllers;
 
-
+/**
+ * Class HackerogueClass
+ *
+ * @package Ludwig\Controllers
+ */
 class HackerogueClass extends AbstractClass
 {
+    /**
+     * The name of the character class
+     *
+     * @var string
+     */
     protected $className = 'Hackerogue';
+
+    /**
+     * Get the character class multiplier of given attribute
+     *
+     * @param string $attribute
+     *
+     * @return float
+     */
     public function getMultiplier($attribute)
     {
         switch($attribute)

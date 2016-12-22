@@ -10,10 +10,27 @@
 
 namespace Ludwig\Controllers;
 
-
+/**
+ * Class SoftwizardClass
+ *
+ * @package Ludwig\Controllers
+ */
 class SoftwizardClass extends AbstractClass
 {
+    /**
+     * The name of the character class
+     *
+     * @var string
+     */
     protected $className = 'Softwizard';
+
+    /**
+     * Get the character class multiplier of given attribute
+     *
+     * @param string $attribute
+     *
+     * @return float
+     */
     public function getMultiplier($attribute)
     {
         switch($attribute)

@@ -13,11 +13,47 @@ namespace Ludwig\Models;
 
 class Challenger extends Model
 {
+
+    /**
+     * Datasource to be used to persist data
+     *
+     * @var IDataSource
+     */
     private $datasource;
+
+    /**
+     * Primary id of the challenger model
+     *
+     * @var integer
+     */
     private $id;
+
+    /**
+     * Name of the challenger
+     *
+     * @var string
+     */
     private $name;
+
+    /**
+     * Attribute to be used when challenging this challenger
+     *
+     * @var string
+     */
     private $favorite_attribute;
+
+    /**
+     * Attribute point of this challenger
+     *
+     * @var integer
+     */
     private $attribute_point;
+
+    /**
+     * Experience to be awarded when this challenger is defeated
+     *
+     * @var integer
+     */
     private $experience_rewards;
 
     /**
@@ -33,9 +69,9 @@ class Challenger extends Model
 
 
     /**
-     * update property values with the given array
-     * @param $array
-     * @return void
+     * Update property values with the given array
+     *
+     * @param array $array Array of values to be set to properties.
      */
     public function arrayToProperties($array)
     {
@@ -47,7 +83,8 @@ class Challenger extends Model
     }
 
     /**
-     * get the model data as an array.
+     * Get the model data as an array.
+     *
      * @return array;
      */
     public function toArray()

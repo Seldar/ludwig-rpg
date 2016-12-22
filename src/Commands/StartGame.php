@@ -17,6 +17,11 @@ use Ludwig\Controllers\Interactive;
 use Ludwig\Models\Character;
 use Ludwig\Models\IDataSource;
 
+/**
+ * Class StartGame
+ *
+ * @package Ludwig\Commands
+ */
 class StartGame extends Command
 {
     /**
@@ -26,7 +31,13 @@ class StartGame extends Command
      */
     protected $character;
 
-    public function __construct($argv, IDataSource $dataSource)
+    /**
+     * StartGame constructor.
+     *
+     * @param array $argv Arguments passed to console command
+     * @param IDataSource $dataSource Datasource object to be used for persistence
+     */
+    public function __construct(array $argv, IDataSource $dataSource)
     {
         $this->datasource = $dataSource;
         try {
@@ -54,6 +65,9 @@ class StartGame extends Command
         }
     }
 
+    /**
+     * Initiates starting a fresh game logic
+     */
     private function newGame()
     {
         Interactive::consolePrint('Starting a new game...');
@@ -61,6 +75,11 @@ class StartGame extends Command
         $this->createCharacter();
     }
 
+    /**
+     * Loads a character using save key.
+     *
+     * @param string $saveKey Save key to be used to load a character
+     */
     private function resumeGame($saveKey)
     {
         try {
@@ -77,6 +96,9 @@ class StartGame extends Command
         }
     }
 
+    /**
+     * Create a fresh new character
+     */
     private function createCharacter()
     {
         Interactive::consolePrint('Choose your class: ([C]odefighter(default), [H]ackerogue, [S]oftwizard)');
@@ -114,6 +136,11 @@ class StartGame extends Command
         $this->checkProfile();
     }
 
+    /**
+     * Returns Character object of the game
+     *
+     * @return Character
+     */
     public function getCharacter()
     {
         return $this->character;
