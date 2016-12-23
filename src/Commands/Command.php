@@ -19,7 +19,7 @@ use Ludwig\Models\IDataSource;
  *
  * @package Ludwig\Commands
  */
-class Command
+abstract class Command
 {
     /**
      * Holds the Character object.

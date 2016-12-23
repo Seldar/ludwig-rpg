@@ -33,8 +33,7 @@ class SoftwizardClass extends AbstractClass
      */
     public function getMultiplier($attribute)
     {
-        switch($attribute)
-        {
+        switch ($attribute) {
             case "Algorithms":
                 return 2;
                 break;

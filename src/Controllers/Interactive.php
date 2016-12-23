@@ -32,10 +32,12 @@ class Interactive
     /**
      * Reads the standard input and returns it.
      *
-     * @return string Last user entered line on the console
+     * @param resource $handle input stream resource
+     *
+     * @return string
      */
-    public static function consoleInput()
+    public static function consoleInput($handle)
     {
-        return trim(fgets(STDIN));
+        return trim(fgets($handle));
     }
 }

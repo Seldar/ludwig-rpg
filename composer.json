@@ -11,7 +11,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "Ludwig\\": "src/"
+      "Ludwig\\": "src/",
+      "Ludwig\\Tests\\": "tests/"
     }
   },
   "require": {

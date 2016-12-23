@@ -12,13 +12,14 @@ namespace Ludwig\Commands;
 
 
 use Ludwig\Controllers\Interactive;
+use Ludwig\Models\Challenger;
 use Ludwig\Models\Character;
-use Ludwig\Models\Model;
-use Ludwig\Models\SQLiteDataSource;
+use Ludwig\Models\IDataSource;
 
 
 /**
  * Class GameEngine
+ * Main Game logic
  *
  * @package Ludwig\Commands
  */
@@ -32,16 +33,24 @@ class GameEngine extends Command
     protected $character;
 
     /**
+     * Holds the input resource.
+     *
+     * @var resource
+     */
+    private $handle;
+
+    /**
      * GameEngine constructor.
      *
-     * @param array $argv Arguments passed to console command
+     * @param IDataSource $datasource
+     * @param resource $handle input stream resource
+     * @param Character $character
      */
-    public function __construct(array $argv)
+    public function __construct(IDataSource $datasource, $handle, Character $character)
     {
-        $this->datasource = new SQLiteDataSource();
-        $game = new StartGame($argv, $this->datasource);
-        $this->character = $game->getCharacter();
-        $this->initiateGame();
+        $this->datasource = $datasource;
+        $this->character = $character;
+        $this->handle = $handle;
     }
 
     /**
@@ -50,28 +59,29 @@ class GameEngine extends Command
     public function initiateGame()
     {
         $quit = false;
-        while (!$quit) {
-            Interactive::consolePrint("Hello Ludwig. You are at google.com. You can go [e]xplore the web from here. You can google [y]ourself. You can also ctrl+[s] your progress or just [c]lose the browser and [q]uit.");
-            $input = Interactive::consoleInput();
-            switch ($input) {
-                case "e":
-                    $this->explore(rand(5, 20)/10);
-                    break;
-                case "y":
-                    $this->checkProfile();
-                    break;
-                case "s":
-                    $this->save();
-                    break;
-                case "c":
-                    $quit = true;
-                    break;
-                case "q":
-                    $quit = true;
-                    break;
-                default:
-                    Interactive::consolePrint("Nothing selected.");
-            }
+        Interactive::consolePrint("Hello Ludwig. You are at google.com. You can go [e]xplore the web from here. You can google [y]ourself. You can also ctrl+[s] your progress or just [c]lose the browser and [q]uit.");
+        $input = Interactive::consoleInput($this->handle);
+        switch ($input) {
+            case "e":
+                $this->explore(rand(5, 20) / 10);
+                break;
+            case "y":
+                $this->checkProfile();
+                break;
+            case "s":
+                $this->save();
+                break;
+            case "c":
+                $quit = true;
+                break;
+            case "q":
+                $quit = true;
+                break;
+            default:
+                Interactive::consolePrint("Nothing selected.");
+        }
+        if (!$quit) {
+            $this->initiateGame();
         }
     }
 
@@ -83,10 +93,11 @@ class GameEngine extends Command
      */
     public function explore($random)
     {
-        $challenger = Model::query($this->datasource, "SELECT * FROM challengers WHERE experience_rewards = :level ORDER BY RANDOM() LIMIT 1", ["level" => $this->character->getLevel()]);
-        $challenger_details = explode("@", $challenger[0]['name']);
+        $challenger = new Challenger($this->datasource);
+        $challenger->queryRandomChallenger($this->character->getLevel());
+        $challenger_details = explode("@", $challenger->getName());
         Interactive::consolePrint("While googling around you clicked a link on \033[31m" . trim($challenger_details[1]) . "\033[0m and while browsing you have been challenged by : \033[32m" . trim($challenger_details[0]) . "\033[0m!");
-        $this->challenge($challenger[0],$random);
+        $this->challenge($challenger, $random);
     }
 
     /**
@@ -94,20 +105,20 @@ class GameEngine extends Command
      * If the character wins, get xp equal to reward_experience of the challenger. Checks and
      * initiates leveling up logic.
      *
-     * @param array $challenger Challenger information
+     * @param Challenger $challenger Challenger Object
      * @param float $random Random number between 0.5-2
      */
-    public function challenge(array $challenger, $random)
+    public function challenge(Challenger $challenger, $random)
     {
-        $char_attribute_point = $this->character->{"get" . ($challenger['favorite_attribute'])}() * $random * $this->character->getClass()->getMultiplier($challenger['favorite_attribute']);
-        if ($char_attribute_point > $challenger['attribute_point']) {
-            Interactive::consolePrint("You showed off some real coding skills on \033[31m" . $challenger['favorite_attribute'] . "\033[0m and scored: \033[37m" . $char_attribute_point . "  \033[32m" . $challenger['name'] . "\033[0m with score " . $challenger['attribute_point'] .  " was both amazed and overwhelmed! You won the challenge and gained " . $challenger[0]['experience_rewards'] . ' experience!');
-            $leveled_up = $this->character->earnExperience($challenger['experience_rewards']);
+        $char_attribute_point = $this->character->{"get" . ($challenger->getFavoriteAttribute())}() * $random * $this->character->getClass()->getMultiplier($challenger->getFavoriteAttribute());
+        if ($char_attribute_point > $challenger->getAttributePoint()) {
+            Interactive::consolePrint("You showed off some real coding skills on \033[31m" . $challenger->getFavoriteAttribute() . "\033[0m and scored: \033[37m" . $char_attribute_point . "  \033[32m" . $challenger->getName() . "\033[0m with score " . $challenger->getAttributePoint() . " was both amazed and overwhelmed! You won the challenge and gained " . $challenger->getExperienceRewards() . ' experience!');
+            $leveled_up = $this->character->earnExperience($challenger->getExperienceRewards());
             if ($leveled_up) {
                 $this->levelUp();
             }
         } else {
-            Interactive::consolePrint("You tried your best with a score of " . $char_attribute_point . " but you couldn't outcode  \033[32m" . $challenger['name'] . "\033[0m who has a score of " . $challenger['attribute_point'] );
+            Interactive::consolePrint("You tried your best with a score of " . $char_attribute_point . " but you couldn't outcode  \033[32m" . $challenger->getName() . "\033[0m who has a score of " . $challenger->getAttributePoint());
         }
     }
 
@@ -123,7 +134,7 @@ class GameEngine extends Command
             if (isset($freebies)) {
                 Interactive::consolePrint('Please commit points with sum of exactly 5 seperated by comma');
             }
-            $line = Interactive::consoleInput();
+            $line = Interactive::consoleInput($this->handle);
             $freebies = explode(",", $line);
         } while (array_sum($freebies) <> 5);
 

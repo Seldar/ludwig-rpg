@@ -10,15 +10,13 @@
 
 namespace Ludwig\Commands;
 
-use Ludwig\Controllers\CodefighterClass;
-use Ludwig\Controllers\HackerogueClass;
-use Ludwig\Controllers\SoftwizardClass;
 use Ludwig\Controllers\Interactive;
 use Ludwig\Models\Character;
 use Ludwig\Models\IDataSource;
 
 /**
  * Class StartGame
+ * Game Starting Logic
  *
  * @package Ludwig\Commands
  */
@@ -101,36 +99,25 @@ class StartGame extends Command
      */
     private function createCharacter()
     {
-        Interactive::consolePrint('Choose your class: ([C]odefighter(default), [H]ackerogue, [S]oftwizard)');
-        $class = Interactive::consoleInput();
-        switch ($class) {
-            case "H":
-                $classObject = new HackerogueClass();
-                break;
-            case "S":
-                $classObject = new SoftwizardClass();
-                break;
-            default:
-                $classObject = new CodefighterClass();
-                break;
-        }
+        $character = new Character($this->datasource);
+        do {
+            Interactive::consolePrint('Choose your class: ([C]odefighter, [H]ackerogue, [S]oftwizard)');
+            $class = Interactive::consoleInput();
+        } while (!$character->setClass($class));
 
-        Interactive::consolePrint('You are now a ' . $classObject->getClassName());
+        Interactive::consolePrint('You are now a ' . $character->getClass()->getClassName());
         Interactive::consolePrint('Now you can improve your character with freebies. You have 5 freebies to distribute among your attributes.');
         Interactive::consolePrint('Enter how many freebies you are going to commit for each attribute (Algorithms, Performance, Persistance) seperated by comma respectively');
 
         do {
-            if(isset($freebies))
-            {
+            if (isset($freebies)) {
                 Interactive::consolePrint('Please commit points with sum of exactly 5 seperated by comma');
             }
             $line = Interactive::consoleInput();
             $freebies = explode(",", $line);
         } while (array_sum($freebies) <> 5);
 
-        $character = new Character($this->datasource);
-        $character->createCharacter($classObject,0,$freebies);
-
+        $character->createCharacter(0, $freebies);
         Interactive::consolePrint('You have successfully created your ' . $character->getClass()->getClassName() . ' with below stats: ');
         $this->character = $character;
         $this->checkProfile();

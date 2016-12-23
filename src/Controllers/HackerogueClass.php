@@ -33,8 +33,7 @@ class HackerogueClass extends AbstractClass
      */
     public function getMultiplier($attribute)
     {
-        switch($attribute)
-        {
+        switch ($attribute) {
             case "Algorithms":
                 return 0.5;
                 break;

@@ -11,6 +11,11 @@
 namespace Ludwig\Models;
 
 
+/**
+ * Class Challenger
+ *
+ * @package Ludwig\Models
+ */
 class Challenger extends Model
 {
 
@@ -59,6 +64,8 @@ class Challenger extends Model
     /**
      * Character constructor.
      * Initializing properties
+     *
+     * @param IDataSource $datasource
      */
     public function __construct(IDataSource $datasource)
     {
@@ -67,13 +74,12 @@ class Challenger extends Model
         $this->primaryKey = "id";
     }
 
-
     /**
      * Update property values with the given array
      *
      * @param array $array Array of values to be set to properties.
      */
-    public function arrayToProperties($array)
+    public function arrayToProperties(array $array)
     {
         $this->id = isset($array['id']) ? $array['id'] : null;
         $this->name = isset($array['name']) ? $array['name'] : null;
@@ -101,6 +107,60 @@ class Challenger extends Model
         if (isset($this->experience_rewards))
             $array['experience_rewards'] = $this->experience_rewards;
         return $array;
+    }
+
+    /**
+     * Query database for a random challenger appropriate for the characters level
+     *
+     * @param int $level level of the character who is going to challenge this challenger
+     *
+     * @return Challenger
+     */
+    public function queryRandomChallenger($level)
+    {
+        $challenger = $this->query($this->datasource, "SELECT * FROM challengers WHERE experience_rewards = :level ORDER BY RANDOM() LIMIT 1", ["level" => $level]);
+        $this->arrayToProperties($challenger[0]);
+        return $this;
+    }
+
+    /**
+     * Getter for name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Getter for favorite_attribute
+     *
+     * @return string
+     */
+    public function getFavoriteAttribute()
+    {
+        return $this->favorite_attribute;
+    }
+
+    /**
+     * Getter for attribute_point
+     *
+     * @return int
+     */
+    public function getAttributePoint()
+    {
+        return $this->attribute_point;
+    }
+
+    /**
+     * Getter for experience_rewards
+     *
+     * @return int
+     */
+    public function getExperienceRewards()
+    {
+        return $this->experience_rewards;
     }
 
 }

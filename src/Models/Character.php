@@ -16,21 +16,80 @@ use Ludwig\Controllers\HackerogueClass;
 use Ludwig\Controllers\SoftwizardClass;
 use Ludwig\Controllers\CodefighterClass;
 
+/**
+ * Class Character
+ *
+ * @package Ludwig\Models
+ */
 class Character extends Model
 {
+    /**
+     * Datasource to be used to persist data
+     *
+     * @var IDataSource
+     */
     private $datasource;
+
+    /**
+     * Primary key which is used to load the character
+     *
+     * @var string
+     */
     private $key;
+
+    /**
+     * Class object identifying Characters class
+     *
+     * @var AbstractClass
+     */
     private $class;
+
+    /**
+     * Current Experience point of the character
+     *
+     * @var int
+     */
     private $experience = 0;
+
+    /**
+     * Current level of the character
+     *
+     * @var int
+     */
     private $level = 0;
+
+    /**
+     * Current title of the character
+     *
+     * @var string
+     */
     private $title = 'Intern';
+
+    /**
+     * The value of algorithm attribute
+     *
+     * @var int
+     */
     private $algorithms = 5;
+    /**
+     * The value of performance attribute
+     *
+     * @var int
+     */
     private $performance = 5;
+
+    /**
+     * The value of persistence attribute
+     *
+     * @var int
+     */
     private $persistence = 5;
 
     /**
      * Character constructor.
      * Initializing properties
+     *
+     * @param IDataSource $datasource
      */
     public function __construct(IDataSource $datasource)
     {
@@ -40,6 +99,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for Key
+     *
      * @return string
      */
     public function getKey()
@@ -48,6 +109,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for character Class
+     *
      * @return AbstractClass
      */
     public function getClass()
@@ -56,6 +119,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for experience
+     *
      * @return int
      */
     public function getExperience()
@@ -64,6 +129,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for level
+     *
      * @return int
      */
     public function getLevel()
@@ -72,6 +139,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for title
+     *
      * @return string
      */
     public function getTitle()
@@ -80,6 +149,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for algorithms attribute
+     *
      * @return int
      */
     public function getAlgorithms()
@@ -88,6 +159,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for performance attribute
+     *
      * @return int
      */
     public function getPerformance()
@@ -96,6 +169,8 @@ class Character extends Model
     }
 
     /**
+     * Getter for persistance attribute
+     *
      * @return int
      */
     public function getPersistence()
@@ -103,41 +178,76 @@ class Character extends Model
         return $this->persistence;
     }
 
-    public function createCharacter(AbstractClass $class, $experience, $freebies)
+    /**
+     * Creates a new character with the given parameters
+     *
+     * @param $experience
+     * @param $freebies
+     */
+    public function createCharacter($experience, $freebies)
     {
-        $this->class = $class;
         $this->experience = $experience;
-        $this->algorithms += $freebies[0];
-        $this->performance += $freebies[1];
-        $this->persistence += $freebies[2];
+        $this->increaseAlgorithms($freebies[0]);
+        $this->increasePerformance($freebies[1]);
+        $this->increasePersistence($freebies[2]);
         $this->updateLevel(false);
     }
 
+    /**
+     * Increase algorithms value
+     *
+     * @param $point
+     */
     public function increaseAlgorithms($point)
     {
         $this->algorithms += $point;
     }
 
+    /**
+     * Increase performance value
+     *
+     * @param $point
+     */
     public function increasePerformance($point)
     {
         $this->performance += $point;
     }
 
+    /**
+     * Increase persistence value
+     *
+     * @param $point
+     */
     public function increasePersistence($point)
     {
         $this->persistence += $point;
     }
 
+    /**
+     * Increase experience and check for levelup
+     *
+     * @param int $xp
+     *
+     * @return bool
+     */
     public function earnExperience($xp)
     {
         $this->experience += $xp;
         return $this->updateLevel(true);
     }
 
+    /**
+     * Checks if current experience triggers a level change
+     * Updates level and returns true when a level up is required
+     *
+     * @param bool $withLevelUp Should this method trigger a level up or not
+     *
+     * @return bool
+     */
     public function updateLevel($withLevelUp)
     {
         $leveled_up = false;
-        $level = Level::getLevelByExperience($this->datasource,$this->experience);
+        $level = Level::getLevelByExperience($this->datasource, $this->experience);
         if ($this->level < $level->getLevel()) {
             if ($withLevelUp) {
                 $leveled_up = true;
@@ -149,11 +259,11 @@ class Character extends Model
     }
 
     /**
-     * update property values with the given array
-     * @param $array
-     * @return void
+     * Update property values with the given array
+     *
+     * @param array $array Array of values to be set to properties.
      */
-    public function arrayToProperties($array)
+    public function arrayToProperties(array $array)
     {
         $this->key = isset($array['key']) ? $array['key'] : null;
         if (isset($array['class'])) {
@@ -179,7 +289,8 @@ class Character extends Model
     }
 
     /**
-     * get the model data as an array.
+     * Get the model data as an array.
+     *
      * @return array;
      */
     public function toArray()
@@ -200,24 +311,39 @@ class Character extends Model
         return $array;
     }
 
+    /**
+     * Saves the current stats of the character into datasource with a key string to be used to load later
+     */
     public function save()
     {
         $this->key = md5(microtime() . 'E' . $this->experience . 'A' . $this->algorithms . 'F' . $this->performance . 'S' . $this->persistence . 'C' . $this->getClass()->getClassName());
         $this->datasource->create($this->getTableName(), $this->toArray());
     }
 
+    /**
+     * Sets the class of the character
+     *
+     * @param string $classKey A character representing the class
+     *
+     * @return bool
+     */
     public function setClass($classKey)
     {
         switch ($classKey) {
             case "H":
                 $this->class = new HackerogueClass();
+                return true;
                 break;
             case "S":
                 $this->class = new SoftwizardClass();
+                return true;
+                break;
+            case "C":
+                $this->class = new CodefighterClass();
+                return true;
                 break;
             default:
-                $this->class = new CodefighterClass();
-                break;
+                return false;
         }
     }
 }

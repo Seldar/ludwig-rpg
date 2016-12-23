@@ -10,4 +10,11 @@
 
 include "vendor/autoload.php";
 
-$command = new \Ludwig\Commands\GameEngine($argv);
+use Ludwig\Models\SQLiteDataSource;
+use Ludwig\Commands\GameEngine;
+use Ludwig\Commands\StartGame;
+
+$datasource = new SQLiteDataSource();
+$startGame = new StartGame($argv,$datasource);
+$command = new GameEngine($datasource, STDIN, $startGame->getCharacter());
+$command->initiateGame();
