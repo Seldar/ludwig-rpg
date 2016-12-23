@@ -30,13 +30,22 @@ class StartGame extends Command
     protected $character;
 
     /**
+     * Holds the input resource.
+     *
+     * @var resource
+     */
+    private $handle;
+
+    /**
      * StartGame constructor.
      *
-     * @param array $argv Arguments passed to console command
      * @param IDataSource $dataSource Datasource object to be used for persistence
+     * @param resource $handle input stream resource
+     * @param array $argv Arguments passed to console command
      */
-    public function __construct(array $argv, IDataSource $dataSource)
+    public function __construct(IDataSource $dataSource, $handle, array $argv)
     {
+        $this->handle = $handle;
         $this->datasource = $dataSource;
         try {
             if (isset($argv[1])) {
@@ -102,7 +111,7 @@ class StartGame extends Command
         $character = new Character($this->datasource);
         do {
             Interactive::consolePrint('Choose your class: ([C]odefighter, [H]ackerogue, [S]oftwizard)');
-            $class = Interactive::consoleInput();
+            $class = Interactive::consoleInput($this->handle);
         } while (!$character->setClass($class));
 
         Interactive::consolePrint('You are now a ' . $character->getClass()->getClassName());
@@ -113,7 +122,7 @@ class StartGame extends Command
             if (isset($freebies)) {
                 Interactive::consolePrint('Please commit points with sum of exactly 5 seperated by comma');
             }
-            $line = Interactive::consoleInput();
+            $line = Interactive::consoleInput($this->handle);
             $freebies = explode(",", $line);
         } while (array_sum($freebies) <> 5);
 
