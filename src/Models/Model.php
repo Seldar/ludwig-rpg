@@ -20,6 +20,13 @@ namespace Ludwig\Models;
 abstract class Model
 {
     /**
+     * Datasource to be used to persist data
+     *
+     * @var IDataSource
+     */
+    private $datasource;
+
+    /**
      * Name of the table that this model represents
      *
      * @var string
@@ -41,7 +48,7 @@ abstract class Model
      */
     public function __construct(IDataSource $datasource)
     {
-        $this->datasource = $datasource;;
+        $this->datasource = $datasource;
     }
 
     /**
@@ -112,7 +119,7 @@ abstract class Model
     public static function readBy($conditions, IDataSource $datasource)
     {
         $response = array();
-        $obj = new static();
+        $obj = new static($datasource);
         $result = $datasource->readBy($obj->getTableName(), $conditions);
         foreach ($result as $array) {
             $obj->arrayToProperties($array);
