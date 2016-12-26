@@ -10,7 +10,6 @@
 
 namespace Ludwig\Tests\Controllers;
 
-
 use Ludwig\Controllers\Interactive;
 
 class InteractiveTest extends \PHPUnit_Framework_TestCase
