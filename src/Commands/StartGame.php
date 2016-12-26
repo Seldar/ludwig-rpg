@@ -78,7 +78,7 @@ class StartGame extends Command
     {
         Interactive::consolePrint('Starting a new game...');
         Interactive::consolePrint('Welcome to Ludwig RPG. You are Ludwig a young programmer, who tries to gain experience in various parts of the internet by fighting challengers.');
-        $this->createCharacter();
+        $this->prepareCharacter(new Character($this->datasource));
     }
 
     /**
@@ -93,6 +93,7 @@ class StartGame extends Command
             if (is_a($this->character,Character::class)) {
                 Interactive::consolePrint('You successfully load your ' . $this->character->getClass()->getClassName() . ' with below stats: ');
                 $this->checkProfile();
+                Interactive::consolePrint('Welcome to Ludwig RPG. You are Ludwig a young programmer, who tries to gain experience in various parts of the internet by fighting challengers.');
             } else {
                 throw new \Exception('The load key you\'ve entered does not exists.');
             }
@@ -102,11 +103,12 @@ class StartGame extends Command
     }
 
     /**
-     * Create a fresh new character
+     * Prepare a new character
+     *
+     * @param Character $character
      */
-    private function createCharacter()
+    private function prepareCharacter(Character $character)
     {
-        $character = new Character($this->datasource);
         do {
             Interactive::consolePrint('Choose your class: ([C]odefighter, [H]ackerogue, [S]oftwizard)');
             $class = Interactive::consoleInput($this->handle);
