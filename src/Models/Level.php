@@ -109,12 +109,15 @@ class Level extends Model
     public function toArray()
     {
         $array = array();
-        if (isset($this->level))
+        if (isset($this->level)) {
             $array['level'] = $this->level;
-        if (isset($this->min_exp))
+        }
+        if (isset($this->min_exp)) {
             $array['min_exp'] = $this->min_exp;
-        if (isset($this->title))
+        }
+        if (isset($this->title)) {
             $array['title'] = $this->title;
+        }
         return $array;
     }
 

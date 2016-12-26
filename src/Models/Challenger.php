@@ -96,16 +96,21 @@ class Challenger extends Model
     public function toArray()
     {
         $array = array();
-        if (isset($this->id))
+        if (isset($this->id)) {
             $array['id'] = $this->id;
-        if (isset($this->name))
+        }
+        if (isset($this->name)) {
             $array['name'] = $this->getName();
-        if (isset($this->favorite_attribute))
+        }
+        if (isset($this->favorite_attribute)) {
             $array['favorite_attribute'] = $this->favorite_attribute;
-        if (isset($this->attribute_point))
+        }
+        if (isset($this->attribute_point)) {
             $array['attribute_point'] = $this->attribute_point;
-        if (isset($this->experience_rewards))
+        }
+        if (isset($this->experience_rewards)) {
             $array['experience_rewards'] = $this->experience_rewards;
+        }
         return $array;
     }
 

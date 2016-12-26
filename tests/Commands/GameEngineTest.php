@@ -15,6 +15,7 @@ use Ludwig\Commands\GameEngine;
 use Ludwig\Controllers\CodefighterClass;
 use Ludwig\Models\SQLiteDataSource;
 use Ludwig\Models\Character;
+use Ludwig\Tests\DbCase;
 
 class GameEngineTest extends DbCase
 {

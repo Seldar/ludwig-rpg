@@ -181,10 +181,10 @@ class Character extends Model
     /**
      * Creates a new character with the given parameters
      *
-     * @param $experience
-     * @param $freebies
+     * @param int $experience
+     * @param array $freebies
      */
-    public function createCharacter($experience, $freebies)
+    public function createCharacter($experience, array $freebies)
     {
         $this->experience = $experience;
         $this->increaseAlgorithms($freebies[0]);
@@ -296,18 +296,24 @@ class Character extends Model
     public function toArray()
     {
         $array = array();
-        if (isset($this->key))
+        if (isset($this->key)) {
             $array['key'] = $this->key;
-        if (isset($this->class))
+        }
+        if (isset($this->class)) {
             $array['class'] = $this->getClass()->getClassName();
-        if (isset($this->experience))
+        }
+        if (isset($this->experience)) {
             $array['experience'] = $this->experience;
-        if (isset($this->algorithms))
+        }
+        if (isset($this->algorithms)) {
             $array['algorithms'] = $this->algorithms;
-        if (isset($this->performance))
+        }
+        if (isset($this->performance)) {
             $array['performance'] = $this->performance;
-        if (isset($this->persistence))
+        }
+        if (isset($this->persistence)) {
             $array['persistence'] = $this->persistence;
+        }
         return $array;
     }
 
