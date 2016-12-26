@@ -36,13 +36,10 @@ class SoftwizardClass extends AbstractClass
         switch ($attribute) {
             case "Algorithms":
                 return 2;
-                break;
             case "Performance":
                 return 1;
-                break;
             case "Persistence":
                 return 0.5;
-                break;
             default:
                 return 1;
         }

@@ -291,7 +291,7 @@ class Character extends Model
     /**
      * Get the model data as an array.
      *
-     * @return array;
+     * @return array
      */
     public function toArray()
     {
@@ -339,15 +339,12 @@ class Character extends Model
             case "H":
                 $this->class = new HackerogueClass();
                 return true;
-                break;
             case "S":
                 $this->class = new SoftwizardClass();
                 return true;
-                break;
             case "C":
                 $this->class = new CodefighterClass();
                 return true;
-                break;
             default:
                 return false;
         }

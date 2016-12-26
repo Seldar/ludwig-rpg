@@ -34,6 +34,17 @@ abstract class Model
     protected $primaryKey;
 
     /**
+     * Model constructor.
+     * Initializing properties
+     *
+     * @param IDataSource $datasource
+     */
+    public function __construct(IDataSource $datasource)
+    {
+        $this->datasource = $datasource;;
+    }
+
+    /**
      * Get the table name of the model.
      *
      * @return string
@@ -81,7 +92,7 @@ abstract class Model
     {
         $obj = new static($datasource);
         $array = $datasource->readOne($obj->getTableName(), $obj->getPrimaryKey(), $id);
-        if ($array) {
+        if (is_array($array)) {
             $obj->arrayToProperties($array);
             return $obj;
         } else {
@@ -126,7 +137,7 @@ abstract class Model
     /**
      * Get the model data as an array.
      *
-     * @return array;
+     * @return array
      */
     abstract public function toArray();
 

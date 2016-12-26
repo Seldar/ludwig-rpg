@@ -37,13 +37,10 @@ class CodefighterClass extends AbstractClass
         switch ($attribute) {
             case "Algorithms":
                 return 1;
-                break;
             case "Performance":
                 return 0.5;
-                break;
             case "Persistence":
                 return 2;
-                break;
             default:
                 return 1;
         }

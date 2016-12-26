@@ -36,13 +36,10 @@ class HackerogueClass extends AbstractClass
         switch ($attribute) {
             case "Algorithms":
                 return 0.5;
-                break;
             case "Performance":
                 return 2;
-                break;
             case "Persistence":
                 return 1;
-                break;
             default:
                 return 1;
         }

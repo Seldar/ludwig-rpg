@@ -33,7 +33,7 @@ abstract class AbstractClass
      *
      * @return float
      */
-    public abstract function getMultiplier($attribute);
+    abstract public  function getMultiplier($attribute);
 
     /**
      * Returns character class name

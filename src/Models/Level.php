@@ -104,7 +104,7 @@ class Level extends Model
     /**
      * Get the model data as an array.
      *
-     * @return array;
+     * @return array
      */
     public function toArray()
     {

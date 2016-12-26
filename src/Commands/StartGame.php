@@ -90,7 +90,7 @@ class StartGame extends Command
     {
         try {
             $this->character = Character::readById($saveKey, $this->datasource);
-            if ($this->character) {
+            if (is_a($this->character,Character::class)) {
                 Interactive::consolePrint('You successfully load your ' . $this->character->getClass()->getClassName() . ' with below stats: ');
                 $this->checkProfile();
             } else {
@@ -110,7 +110,7 @@ class StartGame extends Command
         do {
             Interactive::consolePrint('Choose your class: ([C]odefighter, [H]ackerogue, [S]oftwizard)');
             $class = Interactive::consoleInput($this->handle);
-        } while (!$character->setClass($class));
+        } while ($character->setClass($class) === false);
 
         Interactive::consolePrint('You are now a ' . $character->getClass()->getClassName());
         Interactive::consolePrint('Now you can improve your character with freebies. You have 5 freebies to distribute among your attributes.');
