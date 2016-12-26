@@ -68,7 +68,6 @@ class StartGame extends Command
             }
         } catch (\Exception $e) {
             Interactive::consolePrint("**Exception**: " . $e->getMessage());
-            exit;
         }
     }
 
@@ -99,7 +98,6 @@ class StartGame extends Command
             }
         } catch (\Exception $e) {
             Interactive::consolePrint("**Exception**: " . $e->getMessage());
-            exit;
         }
     }
 

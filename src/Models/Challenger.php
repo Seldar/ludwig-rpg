@@ -99,7 +99,7 @@ class Challenger extends Model
         if (isset($this->id))
             $array['id'] = $this->id;
         if (isset($this->name))
-            $array['name'] = $this->name;
+            $array['name'] = $this->getName();
         if (isset($this->favorite_attribute))
             $array['favorite_attribute'] = $this->favorite_attribute;
         if (isset($this->attribute_point))

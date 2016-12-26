@@ -8,7 +8,7 @@
  * @author Volkan Ulukut <arthan@gmail.com>
  */
 
-namespace Ludwig\Tests\Commands;
+namespace Ludwig\Tests;
 
 
 class DbCase extends \PHPUnit_Extensions_Database_TestCase
