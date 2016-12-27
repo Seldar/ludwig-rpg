@@ -22,7 +22,7 @@ class StartGameTest extends DbCase
     {
         $datasource = new SQLiteDataSource();
         $handler = fopen("php://memory", "w+");
-        fputs($handler, "C\n2,2,1\nq\n");
+        fputs($handler, "C\n4,4,2\nq\n");
         rewind($handler);
 
         new StartGame($datasource, $handler, ['']);
@@ -36,7 +36,7 @@ class StartGameTest extends DbCase
     {
         $datasource = new SQLiteDataSource();
         $handler = fopen("php://memory", "w+");
-        fputs($handler, "C\n2,2,1\nq\n");
+        fputs($handler, "C\n4,4,2\nq\n");
         rewind($handler);
 
         new StartGame($datasource, $handler, ['', 'new']);
@@ -59,7 +59,7 @@ class StartGameTest extends DbCase
     {
         $datasource = new SQLiteDataSource();
         $handler = fopen("php://memory", "w+");
-        fputs($handler, "C\n2,2,1\nq\n");
+        fputs($handler, "C\n4,4,2\nq\n");
         rewind($handler);
 
         new StartGame($datasource, $handler, ['', 'resume', '56575ceaf426b7a4e819f74795f6dd23']);
@@ -72,7 +72,7 @@ class StartGameTest extends DbCase
     {
         $datasource = new SQLiteDataSource();
         $handler = fopen("php://memory", "w+");
-        fputs($handler, "C\n2,2,1\nq\n");
+        fputs($handler, "C\n4,4,2\nq\n");
         rewind($handler);
 
         new StartGame($datasource, $handler, ['', 'resume']);
@@ -85,7 +85,7 @@ class StartGameTest extends DbCase
     {
         $datasource = new SQLiteDataSource();
         $handler = fopen("php://memory", "w+");
-        fputs($handler, "C\n2,2,1\nq\n");
+        fputs($handler, "C\n4,4,2\nq\n");
         rewind($handler);
 
         new StartGame($datasource, $handler, ['', 'resume', 'test']);
@@ -99,7 +99,7 @@ class StartGameTest extends DbCase
         });
         $datasource = new SQLiteDataSource();
         $handler = fopen("php://memory", "w+");
-        fputs($handler, "C\n2,2,1\nq\n");
+        fputs($handler, "C\n4,4,2\nq\n");
         rewind($handler);
 
         $startGame = new StartGame($datasource, $handler, ['', 'resume', '56575ceaf426b7a4e819f74795f6dd23']);
