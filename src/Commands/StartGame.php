@@ -22,19 +22,6 @@ use Ludwig\Models\IDataSource;
  */
 class StartGame extends Command
 {
-    /**
-     * Holds the Character object.
-     *
-     * @var Character
-     */
-    protected $character;
-
-    /**
-     * Holds the input resource.
-     *
-     * @var resource
-     */
-    private $handle;
 
     /**
      * StartGame constructor.
@@ -57,13 +44,13 @@ class StartGame extends Command
     /**
      * Executes command given by the user
      *
-     * @param string $command
+     * @param array $command
      *
      * @throws \Exception
      *
      * @return bool
      */
-    private function executeCommand($command)
+    private function executeCommand(array $command)
     {
         if (isset($command[1])) {
             switch ($command[1]) {
@@ -135,26 +122,32 @@ class StartGame extends Command
      */
     private function prepareCharacter(Character $character)
     {
-        do {
-            Interactive::consolePrint('Choose your class: ([C]odefighter, [H]ackerogue, [S]oftwizard)');
-            $class = Interactive::consoleInput($this->handle);
-        } while ($character->setClass($class) === false);
 
+        $character = $this->chooseClass($character);
         Interactive::consolePrint('You are now a ' . $character->getClass()->getClassName());
         Interactive::consolePrint('Now you can improve your character with freebies. You have 5 freebies to distribute among your attributes.');
         Interactive::consolePrint('Enter how many freebies you are going to commit for each attribute (Algorithms, Performance, Persistance) seperated by comma respectively');
-
-        do {
-            if (isset($freebies)) {
-                Interactive::consolePrint('Please commit points with sum of exactly 5 seperated by comma');
-            }
-            $line = Interactive::consoleInput($this->handle);
-            $freebies = explode(",", $line);
-        } while (array_sum($freebies) <> 5);
-
-        $character->createCharacter(0, $freebies);
+        $character->createCharacter(0, $this->getFreebieDistribution());
         Interactive::consolePrint('You have successfully created your ' . $character->getClass()->getClassName() . ' with below stats: ');
         $this->character = $character;
         $this->checkProfile();
     }
+
+    /**
+     * Choose class for the character by getting user input
+     *
+     * @param Character $character
+     *
+     * @return Character
+     */
+    private function chooseClass(Character $character)
+    {
+        do {
+            Interactive::consolePrint('Choose your class: ([C]odefighter, [H]ackerogue, [S]oftwizard)');
+            $class = Interactive::consoleInput($this->handle);
+        } while ($character->setClass($class) === false);
+        return $character;
+    }
+
+
 }

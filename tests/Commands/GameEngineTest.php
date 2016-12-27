@@ -111,7 +111,7 @@ class GameEngineTest extends DbCase
         $handler = fopen("php://memory", "w+");
         fputs($handler, "2,2,2\n2,2,1\n");
         rewind($handler);
-        $this->expectOutputRegex("/^Congratulations!.*Please commit points.*Your new profile looks like this:/s");
+        $this->expectOutputRegex("/^Congratulations!.*Please distribute points.*Your new profile looks like this:/s");
         $mockGameEngine = $this->getMockBuilder(GameEngine::class)
             ->setConstructorArgs(array($datasource, $handler, $mockCharacter))
             ->setMethods(array('checkProfile'))

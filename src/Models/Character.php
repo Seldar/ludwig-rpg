@@ -187,40 +187,20 @@ class Character extends Model
     public function createCharacter($experience, array $freebies)
     {
         $this->experience = $experience;
-        $this->increaseAlgorithms($freebies[0]);
-        $this->increasePerformance($freebies[1]);
-        $this->increasePersistence($freebies[2]);
+        $this->increaseAttributes($freebies);
         $this->updateLevel(false);
     }
 
     /**
-     * Increase algorithms value
+     * Increase attribute points
      *
-     * @param $point
+     * @param array $freebies
      */
-    public function increaseAlgorithms($point)
+    public function increaseAttributes(array $freebies)
     {
-        $this->algorithms += $point;
-    }
-
-    /**
-     * Increase performance value
-     *
-     * @param $point
-     */
-    public function increasePerformance($point)
-    {
-        $this->performance += $point;
-    }
-
-    /**
-     * Increase persistence value
-     *
-     * @param $point
-     */
-    public function increasePersistence($point)
-    {
-        $this->persistence += $point;
+        $this->algorithms += $freebies[0];
+        $this->performance += $freebies[1];
+        $this->persistence += $freebies[2];
     }
 
     /**

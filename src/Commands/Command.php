@@ -36,6 +36,13 @@ abstract class Command
     protected $datasource;
 
     /**
+     * Holds the input resource.
+     *
+     * @var resource
+     */
+    protected $handle;
+
+    /**
      * Prints out the attributes of current character.
      */
     protected function checkProfile()
@@ -47,5 +54,22 @@ abstract class Command
         Interactive::consolePrint('Persistence: ' . $this->character->getPersistence());
         Interactive::consolePrint('Experience: ' . $this->character->getExperience());
         Interactive::consolePrint('Level: ' . $this->character->getLevel());
+    }
+
+    /**
+     * Get Freebie distribution from user input
+     *
+     * @return array
+     */
+    protected function getFreebieDistribution()
+    {
+        do {
+            if (isset($freebies)) {
+                Interactive::consolePrint('Please distribute points with sum of exactly 5 seperated by comma');
+            }
+            $line = Interactive::consoleInput($this->handle);
+            $freebies = explode(",", $line);
+        } while (array_sum($freebies) <> 5);
+        return $freebies;
     }
 }

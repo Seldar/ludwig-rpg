@@ -26,20 +26,6 @@ use Ludwig\Models\IDataSource;
 class GameEngine extends Command
 {
     /**
-     * Holds the Character object.
-     *
-     * @var Character
-     */
-    protected $character;
-
-    /**
-     * Holds the input resource.
-     *
-     * @var resource
-     */
-    private $handle;
-
-    /**
      * GameEngine constructor.
      *
      * @param IDataSource $datasource
@@ -143,17 +129,8 @@ class GameEngine extends Command
         Interactive::consolePrint("Congratulations! You leveled up. You are now known as a " . $this->character->getTitle());
         Interactive::consolePrint('Now you can improve your character with freebies. You have 5 freebies to distribute among your attributes.');
         Interactive::consolePrint('Enter how many freebies you are going to commit for each attribute (Algorithms, Performance, Persistance) seperated by comma respectively');
-        do {
-            if (isset($freebies)) {
-                Interactive::consolePrint('Please commit points with sum of exactly 5 seperated by comma');
-            }
-            $line = Interactive::consoleInput($this->handle);
-            $freebies = explode(",", $line);
-        } while (array_sum($freebies) <> 5);
 
-        $this->character->increaseAlgorithms($freebies[0]);
-        $this->character->increasePerformance($freebies[1]);
-        $this->character->increasePersistence($freebies[2]);
+        $this->character->increaseAttributes($this->getFreebieDistribution());
         Interactive::consolePrint('Your new profile looks like this:');
         $this->checkProfile();
     }
