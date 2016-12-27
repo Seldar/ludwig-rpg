@@ -56,7 +56,7 @@ class GameEngineTest extends DbCase
 
     }
 
-    public function testChallenge()
+    public function testChallengeSuccess()
     {
         $datasource = new SQLiteDataSource();
         $mockCharacter = $this->getMockedCharacter($datasource);
@@ -76,9 +76,35 @@ class GameEngineTest extends DbCase
             ->willReturn(1);
 
         $gameEngine = new GameEngine($datasource, $handler, $mockCharacter);
-        $this->invokeMethod($gameEngine,"challenge",[$mockChallenger, 1]);
+        $this->invokeMethod($gameEngine,"challenge",[$mockChallenger, 2]);
 
-        $this->expectOutputRegex("/^You [tried|showed+].*/s");
+        $this->expectOutputRegex("/^You showed.*/s");
+
+    }
+
+    public function testChallengeFail()
+    {
+        $datasource = new SQLiteDataSource();
+        $mockCharacter = $this->getMockedCharacter($datasource);
+        $handler = fopen("php://memory", "w+");
+        fputs($handler, "4,4,2\n");
+        rewind($handler);
+        $mockChallenger = $this->getMockBuilder(Challenger::class)
+            ->setConstructorArgs(array($datasource))
+            ->getMock();
+        $mockChallenger->method('getFavoriteAttribute')
+            ->willReturn('Persistence');
+        $mockChallenger->method('getAttributePoint')
+            ->willReturn(6);
+        $mockChallenger->method('getName')
+            ->willReturn("Sebastian Bergmann @ phpunit.de");
+        $mockChallenger->method('getExperienceRewards')
+            ->willReturn(1);
+
+        $gameEngine = new GameEngine($datasource, $handler, $mockCharacter);
+        $this->invokeMethod($gameEngine,"challenge",[$mockChallenger, 0.5]);
+
+        $this->expectOutputRegex("/^You tried.*/s");
 
     }
 
