@@ -59,17 +59,19 @@ abstract class Command
     /**
      * Get Freebie distribution from user input
      *
+     * @param int $freebieCount How many freebies should be distributed
+     *
      * @return array
      */
-    protected function getFreebieDistribution()
+    protected function getFreebieDistribution($freebieCount)
     {
         do {
             if (isset($freebies)) {
-                Interactive::consolePrint('Please distribute points with sum of exactly 5 seperated by comma');
+                Interactive::consolePrint('Please distribute points with sum of exactly ' . $freebieCount . ' seperated by comma');
             }
             $line = Interactive::consoleInput($this->handle);
             $freebies = explode(",", $line);
-        } while (array_sum($freebies) <> 5);
+        } while (array_sum($freebies) <> $freebieCount);
         return $freebies;
     }
 }

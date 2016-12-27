@@ -124,10 +124,10 @@ class GameEngine extends Command
     private function levelUp()
     {
         Interactive::consolePrint("Congratulations! You leveled up. You are now known as a " . $this->character->getTitle());
-        Interactive::consolePrint('Now you can improve your character with freebies. You have 5 freebies to distribute among your attributes.');
+        Interactive::consolePrint('Now you can improve your character with freebies. You have 10 freebies to distribute among your attributes.');
         Interactive::consolePrint('Enter how many freebies you are going to commit for each attribute (Algorithms, Performance, Persistance) seperated by comma respectively');
 
-        $this->character->increaseAttributes($this->getFreebieDistribution());
+        $this->character->increaseAttributes($this->getFreebieDistribution(10));
         Interactive::consolePrint('Your new profile looks like this:');
         $this->checkProfile();
     }

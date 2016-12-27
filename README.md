@@ -3,6 +3,14 @@ Ludwig-rpg Application[![Build Status](https://travis-ci.org/Seldar/ludwig-rpg.s
 
 The "Ludwig-rpg Application" is a mud-like game that provides a simple command line tool to create a character named ludwig, who could explore and challenge other developers to earn experience and ultimately become a guru developer.   
 
+Features
+------------
+  * Create your character by choosing a class and distribute your starting freebies to attributes that matter!
+  * Explore the interwebz and find famous challengers to improve yourself!
+  * Level up all the way to Software Guru and become the ultimate coder!
+  * Check your attributes and level anytime!
+  * Save your progress anytime and get a save-key which you can use later to load your game! 
+
 Requirements
 ------------
 

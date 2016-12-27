@@ -13,8 +13,11 @@ include "vendor/autoload.php";
 use Ludwig\Models\SQLiteDataSource;
 use Ludwig\Commands\GameEngine;
 use Ludwig\Commands\StartGame;
+use Ludwig\Models\Character;
 
 $datasource = new SQLiteDataSource();
 $startGame = new StartGame($datasource, STDIN, $argv);
-$command = new GameEngine($datasource, STDIN, $startGame->getCharacter());
-$command->initiateGameLoop();
+if(is_a($startGame->getCharacter(),Character::class)) {
+    $command = new GameEngine($datasource, STDIN, $startGame->getCharacter());
+    $command->initiateGameLoop();
+}

@@ -125,9 +125,9 @@ class StartGame extends Command
 
         $character = $this->chooseClass($character);
         Interactive::consolePrint('You are now a ' . $character->getClass()->getClassName());
-        Interactive::consolePrint('Now you can improve your character with freebies. You have 5 freebies to distribute among your attributes.');
+        Interactive::consolePrint('Now you can improve your character with freebies. You have 10 freebies to distribute among your attributes.');
         Interactive::consolePrint('Enter how many freebies you are going to commit for each attribute (Algorithms, Performance, Persistance) seperated by comma respectively');
-        $character->createCharacter(0, $this->getFreebieDistribution());
+        $character->createCharacter(0, $this->getFreebieDistribution(10));
         Interactive::consolePrint('You have successfully created your ' . $character->getClass()->getClassName() . ' with below stats: ');
         $this->character = $character;
         $this->checkProfile();
