@@ -39,6 +39,14 @@ class SoftwizardClassTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual(2, $result);
     }
 
+    public function testGetMultiplierDefault()
+    {
+        $sutClass = new SoftwizardClass();
+        $result = $sutClass->getMultiplier("test");
+        $this->assertEquals(1, $result);
+    }
+
+
     public function testGetClassName()
     {
         $sutClass = new SoftwizardClass();

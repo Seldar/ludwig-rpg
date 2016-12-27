@@ -39,6 +39,14 @@ class HackerogueClassTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual(2, $result);
     }
 
+
+    public function testGetMultiplierDefault()
+    {
+        $sutClass = new HackerogueClass();
+        $result = $sutClass->getMultiplier("test");
+        $this->assertEquals(1, $result);
+    }
+
     public function testGetClassName()
     {
         $sutClass = new HackerogueClass();

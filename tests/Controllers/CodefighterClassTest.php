@@ -39,6 +39,13 @@ class CodefighterClassTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual(2, $result);
     }
 
+    public function testGetMultiplierDefault()
+    {
+        $sutClass = new CodefighterClass();
+        $result = $sutClass->getMultiplier("test");
+        $this->assertEquals(1, $result);
+    }
+
     public function testGetClassName()
     {
         $sutClass = new CodefighterClass();

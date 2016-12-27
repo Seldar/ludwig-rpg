@@ -70,16 +70,6 @@ class Level extends Model
     }
 
     /**
-     * Getter for field min_exp
-     *
-     * @return int
-     */
-    public function getMinExp()
-    {
-        return $this->min_exp;
-    }
-
-    /**
      * Getter for field title
      *
      * @return string

@@ -40,4 +40,18 @@ class ChallengerTest extends DbCase
         $sutClass->arrayToProperties($expected);
         $this->assertSame($expected, $sutClass->toArray());
     }
+
+    public function testGetExperienceRewards()
+    {
+        $expected = [
+            'id' => 1,
+            'name' => 'test',
+            'favorite_attribute' => 'Algorithms',
+            'attribute_point' => 10,
+            'experience_rewards' => 2
+        ];
+        $sutClass = new Challenger(new SQLiteDataSource());
+        $sutClass->arrayToProperties($expected);
+        $this->assertSame(2, $sutClass->getExperienceRewards());
+    }
 }

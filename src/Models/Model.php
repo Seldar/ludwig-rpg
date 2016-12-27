@@ -72,22 +72,6 @@ abstract class Model
     }
 
     /**
-     * Create an object and save it to datasource with an array.
-     *
-     * @param array $array User array to initiate model with
-     * @param IDataSource $datasource datasource to initiate with
-     *
-     * @return Model
-     */
-    public static function createFromArray($array, IDataSource $datasource)
-    {
-        $obj = new static($datasource);
-        $array[$obj->getPrimaryKey()] = $datasource->create($obj->getTableName(), $array);
-        $obj->arrayToProperties($array);
-        return $obj;
-    }
-
-    /**
      * Read a row from datasource using primary key
      *
      * @param int $id
@@ -106,39 +90,6 @@ abstract class Model
             return false;
         }
 
-    }
-
-    /**
-     * Read one or more rows using custom condition
-     *
-     * @param array $conditions
-     * @param IDataSource $datasource
-     *
-     * @return array
-     */
-    public static function readBy($conditions, IDataSource $datasource)
-    {
-        $response = array();
-        $obj = new static($datasource);
-        $result = $datasource->readBy($obj->getTableName(), $conditions);
-        foreach ($result as $array) {
-            $obj->arrayToProperties($array);
-            $response[] = clone $obj;
-        }
-
-        return $response;
-    }
-
-    /**
-     * Update current object in the datasource.
-     *
-     * @param IDatasource $datasource
-     *
-     * @return mixed
-     */
-    public function update(IDataSource $datasource)
-    {
-        return $datasource->update($this->getTableName(), $this->getPrimaryKey(), $this->toArray());
     }
 
     /**

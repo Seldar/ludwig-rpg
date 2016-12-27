@@ -45,7 +45,7 @@ class GameEngine extends Command
     public function initiateGameLoop()
     {
 
-        Interactive::consolePrint("Hello Ludwig. You are at google.com. You can go [e]xplore the web from here. You can google [y]ourself. You can also ctrl+[s] your progress or just [c]lose the browser and [q]uit.");
+        Interactive::consolePrint("Hello Ludwig. You are at google.com. You can go [e]xplore the web from here. You can google [y]ourself. You can also ctrl+[s] your progress or just [c]lose the browser and quit.");
         $input = Interactive::consoleInput($this->handle);
         if (!$this->executeCommand($input)) {
             $this->initiateGameLoop();
@@ -73,9 +73,6 @@ class GameEngine extends Command
                 $this->save();
                 break;
             case "c":
-                $quit = true;
-                break;
-            case "q":
                 $quit = true;
                 break;
             default:

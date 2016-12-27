@@ -30,8 +30,8 @@ class GameEngineTest extends DbCase
             ->setConstructorArgs(array($datasource, $handler, $mockCharacter))
             ->setMethods(array('explore','checkProfile','save'))
             ->getMock();
-        $mockGameEngine->expects($this->once())->method('checkProfile');
-        fputs($handler, "test\ne\ny\ns\nq\n");
+        $mockGameEngine->expects($this->any())->method('checkProfile');
+        fputs($handler, "test\ne\n2,2,1\ny\ns\nc\n");
         rewind($handler);
 
         $mockGameEngine->initiateGameLoop();
@@ -43,6 +43,8 @@ class GameEngineTest extends DbCase
         $datasource = new SQLiteDataSource();
         $mockCharacter = $this->getMockedCharacter($datasource);
         $handler = fopen("php://memory", "w+");
+        fputs($handler, "2,2,1\n");
+        rewind($handler);
         $mockGameEngine = $this->getMockBuilder(GameEngine::class)
             ->setConstructorArgs(array($datasource, $handler, $mockCharacter))
             ->setMethods(array('challenge'))
@@ -59,6 +61,8 @@ class GameEngineTest extends DbCase
         $datasource = new SQLiteDataSource();
         $mockCharacter = $this->getMockedCharacter($datasource);
         $handler = fopen("php://memory", "w+");
+        fputs($handler, "2,2,1\n");
+        rewind($handler);
         $mockChallenger = $this->getMockBuilder(Challenger::class)
             ->setConstructorArgs(array($datasource))
             ->getMock();
@@ -135,6 +139,8 @@ class GameEngineTest extends DbCase
             ->willReturn(7);
         $mockCharacter->method('getPersistence')
             ->willReturn(6);
+        $mockCharacter->method('earnExperience')
+            ->willReturn(1);
         return $mockCharacter;
     }
 

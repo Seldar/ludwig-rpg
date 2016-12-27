@@ -102,7 +102,7 @@ class StartGame extends Command
     {
         try {
             $result = Character::readById($saveKey, $this->datasource);
-            if ($result !== false && is_a($result,Character::class)) {
+            if ($result !== false && is_a($result, Character::class)) {
                 $this->character = $result;
                 Interactive::consolePrint('You successfully load your ' . $this->character->getClass()->getClassName() . ' with below stats: ');
                 $this->checkProfile();
