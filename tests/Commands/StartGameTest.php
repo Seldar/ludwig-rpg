@@ -46,18 +46,13 @@ class StartGameTest extends DbCase
             "Persistence: \d+.*Experience: \d+.*Level: \d+.*/s");
     }
 
-    public function testNewGameWithDefault()
+    public function testNewGameWithUndefined()
     {
         $datasource = new SQLiteDataSource();
         $handler = fopen("php://memory", "w+");
-        fputs($handler, "C\n2,2,1\nq\n");
-        rewind($handler);
-
         new StartGame($datasource, $handler, ['', 'test']);
 
-        $this->expectOutputRegex("/^Starting a new game.*Welcome to Ludwig.*Choose.*You are now.*Enter how many.*" .
-            "You have successfully.*Class: [A-Za-z]+.*Title: [A-Za-z]+.*Algorithms: \d+.*Performance: \d+.*" .
-            "Persistence: \d+.*Experience: \d+.*Level: \d+.*/s");
+        $this->expectOutputRegex("/^\*\*Exception\*\*: Undefined parameter: test.*/s");
     }
 
     public function testResumeGame()

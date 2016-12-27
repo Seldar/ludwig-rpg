@@ -245,14 +245,13 @@ class Character extends Model
      */
     public function arrayToProperties(array $array)
     {
-        $this->key = isset($array['key']) ? $array['key'] : null;
-        if (isset($array['class'])) {
-            $this->setClass($array['class'][0]);
-        }
-        $this->experience = isset($array['experience']) ? $array['experience'] : null;
-        $this->algorithms = isset($array['algorithms']) ? $array['algorithms'] : null;
-        $this->performance = isset($array['performance']) ? $array['performance'] : null;
-        $this->persistence = isset($array['persistence']) ? $array['persistence'] : null;
+        $array += array_fill_keys(['key', 'class', 'experience', 'algorithms', 'performance', 'persistence'], null);
+        $this->key = $array['key'];
+        $this->setClass($array['class'][0]);
+        $this->experience = $array['experience'];
+        $this->algorithms = $array['algorithms'];
+        $this->performance = $array['performance'];
+        $this->persistence = $array['persistence'];
         $this->updateLevel(false);
     }
 

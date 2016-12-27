@@ -65,7 +65,7 @@ class StartGame extends Command
                     }
                     break;
                 default:
-                    $this->newGame();
+                    throw new \Exception('Undefined parameter: ' . $command[1]);
             }
         } else {
             $this->newGame();

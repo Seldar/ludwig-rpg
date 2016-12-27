@@ -81,11 +81,12 @@ class Challenger extends Model
      */
     public function arrayToProperties(array $array)
     {
-        $this->id = isset($array['id']) ? $array['id'] : null;
-        $this->name = isset($array['name']) ? $array['name'] : null;
-        $this->favorite_attribute = isset($array['favorite_attribute']) ? $array['favorite_attribute'] : null;
-        $this->attribute_point = isset($array['attribute_point']) ? $array['attribute_point'] : null;
-        $this->experience_rewards = isset($array['experience_rewards']) ? $array['experience_rewards'] : null;
+        $array += array_fill_keys(['id', 'name', 'favorite_attribute', 'attribute_point', 'experience_rewards'], null);
+        $this->id = $array['id'];
+        $this->name = $array['name'];
+        $this->favorite_attribute = $array['favorite_attribute'];
+        $this->attribute_point = $array['attribute_point'];
+        $this->experience_rewards = $array['experience_rewards'];
     }
 
     /**
