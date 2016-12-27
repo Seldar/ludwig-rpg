@@ -17,4 +17,4 @@ use Ludwig\Commands\StartGame;
 $datasource = new SQLiteDataSource();
 $startGame = new StartGame($datasource, STDIN, $argv);
 $command = new GameEngine($datasource, STDIN, $startGame->getCharacter());
-$command->initiateGame();
+$command->initiateGameLoop();

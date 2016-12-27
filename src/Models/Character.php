@@ -28,7 +28,7 @@ class Character extends Model
      *
      * @var IDataSource
      */
-    private $datasource;
+    protected $datasource;
 
     /**
      * Primary key which is used to load the character
@@ -93,7 +93,7 @@ class Character extends Model
      */
     public function __construct(IDataSource $datasource)
     {
-        $this->datasource = $datasource;
+        parent::__construct($datasource);
         $this->tableName = "characters";
         $this->primaryKey = "key";
     }
@@ -267,19 +267,7 @@ class Character extends Model
     {
         $this->key = isset($array['key']) ? $array['key'] : null;
         if (isset($array['class'])) {
-            switch ($array['class']) {
-                case "Hackerogue":
-                    $this->class = new HackerogueClass();
-                    break;
-                case "Softwizard":
-                    $this->class = new SoftwizardClass();
-                    break;
-                default:
-                    $this->class = new CodefighterClass();
-                    break;
-            }
-        } else {
-            $this->class = null;
+            $this->setClass($array['class'][0]);
         }
         $this->experience = isset($array['experience']) ? $array['experience'] : null;
         $this->algorithms = isset($array['algorithms']) ? $array['algorithms'] : null;
@@ -296,24 +284,12 @@ class Character extends Model
     public function toArray()
     {
         $array = array();
-        if (isset($this->key)) {
-            $array['key'] = $this->key;
-        }
-        if (isset($this->class)) {
-            $array['class'] = $this->getClass()->getClassName();
-        }
-        if (isset($this->experience)) {
-            $array['experience'] = $this->experience;
-        }
-        if (isset($this->algorithms)) {
-            $array['algorithms'] = $this->algorithms;
-        }
-        if (isset($this->performance)) {
-            $array['performance'] = $this->performance;
-        }
-        if (isset($this->persistence)) {
-            $array['persistence'] = $this->persistence;
-        }
+        $array['key'] = $this->key;
+        $array['class'] = $this->getClass()->getClassName();
+        $array['experience'] = $this->experience;
+        $array['algorithms'] = $this->algorithms;
+        $array['performance'] = $this->performance;
+        $array['persistence'] = $this->persistence;
         return $array;
     }
 

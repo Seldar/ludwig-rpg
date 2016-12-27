@@ -24,7 +24,7 @@ class Challenger extends Model
      *
      * @var IDataSource
      */
-    private $datasource;
+    protected $datasource;
 
     /**
      * Primary id of the challenger model
@@ -69,7 +69,7 @@ class Challenger extends Model
      */
     public function __construct(IDataSource $datasource)
     {
-        $this->datasource = $datasource;
+        parent::__construct($datasource);
         $this->tableName = "challengers";
         $this->primaryKey = "id";
     }
@@ -96,21 +96,11 @@ class Challenger extends Model
     public function toArray()
     {
         $array = array();
-        if (isset($this->id)) {
-            $array['id'] = $this->id;
-        }
-        if (isset($this->name)) {
-            $array['name'] = $this->getName();
-        }
-        if (isset($this->favorite_attribute)) {
-            $array['favorite_attribute'] = $this->favorite_attribute;
-        }
-        if (isset($this->attribute_point)) {
-            $array['attribute_point'] = $this->attribute_point;
-        }
-        if (isset($this->experience_rewards)) {
-            $array['experience_rewards'] = $this->experience_rewards;
-        }
+        $array['id'] = $this->id;
+        $array['name'] = $this->getName();
+        $array['favorite_attribute'] = $this->favorite_attribute;
+        $array['attribute_point'] = $this->attribute_point;
+        $array['experience_rewards'] = $this->experience_rewards;
         return $array;
     }
 

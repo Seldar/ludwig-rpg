@@ -38,7 +38,7 @@ abstract class Command
     /**
      * Prints out the attributes of current character.
      */
-    public function checkProfile()
+    protected function checkProfile()
     {
         Interactive::consolePrint('Class: ' . $this->character->getClass()->getClassName());
         Interactive::consolePrint('Title: ' . $this->character->getTitle());

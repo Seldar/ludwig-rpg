@@ -30,13 +30,11 @@ class GameEngineTest extends DbCase
             ->setConstructorArgs(array($datasource, $handler, $mockCharacter))
             ->setMethods(array('explore','checkProfile','save'))
             ->getMock();
-        $mockGameEngine->expects($this->once())->method('explore');
         $mockGameEngine->expects($this->once())->method('checkProfile');
-        $mockGameEngine->expects($this->once())->method('save');
         fputs($handler, "test\ne\ny\ns\nq\n");
         rewind($handler);
 
-        $mockGameEngine->initiateGame();
+        $mockGameEngine->initiateGameLoop();
 
         $this->expectOutputRegex("/^Hello Ludwig.*Nothing selected..*Hello Ludwig.*Hello Ludwig.*Hello Ludwig.*/s");
     }
@@ -49,8 +47,8 @@ class GameEngineTest extends DbCase
             ->setConstructorArgs(array($datasource, $handler, $mockCharacter))
             ->setMethods(array('challenge'))
             ->getMock();
-        $mockGameEngine->expects($this->once())->method('challenge');
-        $mockGameEngine->explore(1);
+
+        $this->invokeMethod($mockGameEngine,"explore",[1]);
 
         $this->expectOutputRegex("/^While googling.*challenged by.*/s");
 
@@ -74,7 +72,7 @@ class GameEngineTest extends DbCase
             ->willReturn(1);
 
         $gameEngine = new GameEngine($datasource, $handler, $mockCharacter);
-        $gameEngine->challenge($mockChallenger, 1);
+        $this->invokeMethod($gameEngine,"challenge",[$mockChallenger, 1]);
 
         $this->expectOutputRegex("/^You [tried|showed+].*/s");
 
@@ -87,7 +85,7 @@ class GameEngineTest extends DbCase
         $handler = fopen("php://memory", "w+");
 
         $gameEngine = new GameEngine($datasource, $handler, $mockCharacter);
-        $gameEngine->checkProfile();
+        $this->invokeMethod($gameEngine,"checkProfile");
 
         $this->expectOutputRegex("/^Class: Codefighter.*Title.*Algorithms: 7.*Performance: 7.*Persistence: 6.*Experience:.*Level: 1/s");
 
@@ -100,7 +98,7 @@ class GameEngineTest extends DbCase
         $handler = fopen("php://memory", "w+");
 
         $gameEngine = new GameEngine($datasource, $handler, $mockCharacter);
-        $gameEngine->save();
+        $this->invokeMethod($gameEngine,"save");
 
         $this->expectOutputRegex("/^Character Saved.*Your load key is \"\s*\".*to resume this character/s");
 
@@ -119,7 +117,7 @@ class GameEngineTest extends DbCase
             ->setMethods(array('checkProfile'))
             ->getMock();
         $mockGameEngine->expects($this->once())->method('checkProfile');
-        $mockGameEngine->levelUp();
+        $this->invokeMethod($mockGameEngine,"levelUp");
     }
 
     public function getMockedCharacter(IDataSource $datasource)
@@ -138,5 +136,23 @@ class GameEngineTest extends DbCase
         $mockCharacter->method('getPersistence')
             ->willReturn(6);
         return $mockCharacter;
+    }
+
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object &$object    Instantiated object that we will run method on.
+     * @param string $methodName Method name to call
+     * @param array  $parameters Array of parameters to pass into method.
+     *
+     * @return mixed Method return.
+     */
+    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }

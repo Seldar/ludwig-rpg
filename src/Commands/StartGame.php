@@ -48,27 +48,52 @@ class StartGame extends Command
         $this->handle = $handle;
         $this->datasource = $dataSource;
         try {
-            if (isset($argv[1])) {
-                switch ($argv[1]) {
-                    case "new":
-                        $this->newGame();
-                        break;
-                    case "resume":
-                        if (isset($argv[2])) {
-                            $this->resumeGame($argv[2]);
-                        } else {
-                            throw new \Exception('Argument "saveKey" is missing');
-                        }
-                        break;
-                    default:
-                        $this->newGame();
-                }
-            } else {
-                $this->newGame();
-            }
+            $this->executeCommand($argv);
         } catch (\Exception $e) {
             Interactive::consolePrint("**Exception**: " . $e->getMessage());
         }
+    }
+
+    /**
+     * Executes command given by the user
+     *
+     * @param string $command
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    private function executeCommand($command)
+    {
+        if (isset($command[1])) {
+            switch ($command[1]) {
+                case "new":
+                    $this->newGame();
+                    break;
+                case "resume":
+                    if (isset($command[2])) {
+                        $this->resumeGame($command[2]);
+                    } else {
+                        throw new \Exception('Argument "saveKey" is missing');
+                    }
+                    break;
+                default:
+                    $this->newGame();
+            }
+        } else {
+            $this->newGame();
+        }
+        return true;
+    }
+
+    /**
+     * Returns Character object of the game
+     *
+     * @return Character
+     */
+    public function getCharacter()
+    {
+        return $this->character;
     }
 
     /**
@@ -89,8 +114,9 @@ class StartGame extends Command
     private function resumeGame($saveKey)
     {
         try {
-            $this->character = Character::readById($saveKey, $this->datasource);
-            if (is_a($this->character,Character::class)) {
+            $result = Character::readById($saveKey, $this->datasource);
+            if ($result !== false && is_a($result,Character::class)) {
+                $this->character = $result;
                 Interactive::consolePrint('You successfully load your ' . $this->character->getClass()->getClassName() . ' with below stats: ');
                 $this->checkProfile();
                 Interactive::consolePrint('Welcome to Ludwig RPG. You are Ludwig a young programmer, who tries to gain experience in various parts of the internet by fighting challengers.');
@@ -130,15 +156,5 @@ class StartGame extends Command
         Interactive::consolePrint('You have successfully created your ' . $character->getClass()->getClassName() . ' with below stats: ');
         $this->character = $character;
         $this->checkProfile();
-    }
-
-    /**
-     * Returns Character object of the game
-     *
-     * @return Character
-     */
-    public function getCharacter()
-    {
-        return $this->character;
     }
 }

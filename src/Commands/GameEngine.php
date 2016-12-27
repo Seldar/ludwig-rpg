@@ -56,12 +56,27 @@ class GameEngine extends Command
     /**
      * Initiates the main game loop that runs until user quits.
      */
-    public function initiateGame()
+    public function initiateGameLoop()
     {
-        $quit = false;
+
         Interactive::consolePrint("Hello Ludwig. You are at google.com. You can go [e]xplore the web from here. You can google [y]ourself. You can also ctrl+[s] your progress or just [c]lose the browser and [q]uit.");
         $input = Interactive::consoleInput($this->handle);
-        switch ($input) {
+        if (!$this->executeCommand($input)) {
+            $this->initiateGameLoop();
+        }
+    }
+
+    /**
+     * Executes command given by the user
+     *
+     * @param string $command
+     *
+     * @return bool
+     */
+    private function executeCommand($command)
+    {
+        $quit = false;
+        switch ($command) {
             case "e":
                 $this->explore(rand(5, 20) / 10);
                 break;
@@ -80,9 +95,7 @@ class GameEngine extends Command
             default:
                 Interactive::consolePrint("Nothing selected.");
         }
-        if (!$quit) {
-            $this->initiateGame();
-        }
+        return $quit;
     }
 
     /**
@@ -91,7 +104,7 @@ class GameEngine extends Command
      *
      * @param float $random Random multiplier to use in challenges. Makes testing easier.
      */
-    public function explore($random)
+    private function explore($random)
     {
         $challenger = new Challenger($this->datasource);
         $challenger->queryRandomChallenger($this->character->getLevel());
@@ -108,7 +121,7 @@ class GameEngine extends Command
      * @param Challenger $challenger Challenger Object
      * @param float $random Random number between 0.5-2
      */
-    public function challenge(Challenger $challenger, $random)
+    private function challenge(Challenger $challenger, $random)
     {
         $char_attribute_point = $this->character->{"get" . ($challenger->getFavoriteAttribute())}() * $random * $this->character->getClass()->getMultiplier($challenger->getFavoriteAttribute());
         if ($char_attribute_point > $challenger->getAttributePoint()) {
@@ -125,7 +138,7 @@ class GameEngine extends Command
     /**
      * Levels up the character and distribute freebies to character attributes using console input.
      */
-    public function levelUp()
+    private function levelUp()
     {
         Interactive::consolePrint("Congratulations! You leveled up. You are now known as a " . $this->character->getTitle());
         Interactive::consolePrint('Now you can improve your character with freebies. You have 5 freebies to distribute among your attributes.');
@@ -148,7 +161,7 @@ class GameEngine extends Command
     /**
      * Save the current character progress with all attributes and experience.
      */
-    public function save()
+    private function save()
     {
         $this->character->save();
         Interactive::consolePrint('Character Saved. Your load key is "' . $this->character->getKey() . '" use `php ludwig.php resume ' . $this->character->getKey() . '` to resume this character');

@@ -24,7 +24,7 @@ abstract class Model
      *
      * @var IDataSource
      */
-    private $datasource;
+    protected $datasource;
 
     /**
      * Name of the table that this model represents

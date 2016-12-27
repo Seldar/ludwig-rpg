@@ -23,7 +23,7 @@ class Level extends Model
      *
      * @var IDataSource
      */
-    private $datasource;
+    protected $datasource;
 
     /**
      * Primary key level
@@ -54,7 +54,7 @@ class Level extends Model
      */
     public function __construct(IDataSource $datasource)
     {
-        $this->datasource = $datasource;
+        parent::__construct($datasource);
         $this->tableName = "levels";
         $this->primaryKey = "level";
     }
@@ -109,15 +109,9 @@ class Level extends Model
     public function toArray()
     {
         $array = array();
-        if (isset($this->level)) {
-            $array['level'] = $this->level;
-        }
-        if (isset($this->min_exp)) {
-            $array['min_exp'] = $this->min_exp;
-        }
-        if (isset($this->title)) {
-            $array['title'] = $this->title;
-        }
+        $array['level'] = $this->level;
+        $array['min_exp'] = $this->min_exp;
+        $array['title'] = $this->title;
         return $array;
     }
 
