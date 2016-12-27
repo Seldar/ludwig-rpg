@@ -17,7 +17,7 @@ use Ludwig\Models\Character;
 
 $datasource = new SQLiteDataSource();
 $startGame = new StartGame($datasource, STDIN, $argv);
-if(is_a($startGame->getCharacter(),Character::class)) {
+if (is_a($startGame->getCharacter(), Character::class)) {
     $command = new GameEngine($datasource, STDIN, $startGame->getCharacter());
     $command->initiateGameLoop();
 }
